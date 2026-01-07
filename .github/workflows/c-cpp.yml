@@ -396,8 +396,7 @@ jobs:
           echo '[TASKS] Installing dependencies in Termux'
           apt -o Acquire::Queue-Mode=access -o Acquire::Retries=3 update -y
           DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Use-Pty=0 install -y --no-install-recommends \
-            x11-repo unstable-repo \
-            coreutils binutils procps clang curl \
+            unstable-repo coreutils binutils procps clang curl \
             libarchive libandroid-spawn readline make
 
           echo '[TASKS - BUILD] RUNNING TERMUX-DEBUG BUILD'
