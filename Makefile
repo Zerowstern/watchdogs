@@ -147,7 +147,6 @@ init:
 				readline \
 				curl \
 				libarchive \
-				zlib \
 				binutils \
 				procps-ng \
 				lib32-gcc-libs; \
