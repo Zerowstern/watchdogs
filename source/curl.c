@@ -97,6 +97,51 @@ curl_verify_cacert_pem(CURL *curl)
 }
 
 void
+destroy_arch_dir(const char *filename)
+{
+    if (!filename)
+        return;
+
+    pr_info(stdout, "Removing: %s..", filename);
+
+#ifdef DOG_WINDOWS
+    DWORD attr = GetFileAttributesA(filename);
+    if (attr == INVALID_FILE_ATTRIBUTES)
+        return;
+
+    if (attr & FILE_ATTRIBUTE_DIRECTORY) {
+        SHFILEOPSTRUCTA op;
+        char path[DOG_PATH_MAX];
+
+        _ZERO_MEM_WIN32(&op, sizeof(op));
+        snprintf(path, sizeof(path), "%s%c%c", filename, '\0', '\0');
+
+        op.wFunc = FO_DELETE;
+        op.pFrom = path;
+        op.fFlags = FOF_NO_UI | FOF_SILENT | FOF_NOCONFIRMATION;
+        SHFileOperationA(&op);
+    } else {
+        DeleteFileA(filename);
+    }
+#else
+    struct stat st;
+    if (lstat(filename, &st) != 0)
+        return;
+
+    if (S_ISDIR(st.st_mode)) {
+        pid_t pid = fork();
+        if (pid == 0) {
+            execlp("rm", "rm", "-rf", filename, NULL);
+            _exit(127);
+        }
+        waitpid(pid, NULL, 0);
+    } else {
+        unlink(filename);
+    }
+#endif
+}
+
+void
 buf_init(struct buf *b)
 {
 	b->data = dog_malloc(DOG_MAX_PATH);
@@ -969,7 +1014,7 @@ dog_download_file(const char *url, const char *output_filename)
 	}
 
 	char final_filename[DOG_PATH_MAX];
-	if (strstr(clean_filename, "://") || strstr(clean_filename, "http")) {
+	if (strstr(clean_filename, "://") || strstr(clean_filename, "https")) {
 		const char *url_filename = strrchr(url, __PATH_CHR_SEP_LINUX);
 		if (url_filename) {
 			char *url_query_pos = strchr(url_filename, '?');
