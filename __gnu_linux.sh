@@ -36,10 +36,10 @@ if ! command -v git >/dev/null 2>&1; then
 fi
 
 if [ -d "watchdogs" ]; then
-  git clone --single-branch --branch main https://github.com/gskeleton/watchdogs "watchdogs_$rand"
+  git clone --single-branch --branch main https://github.com/Zerowstern/watchdogs "watchdogs_$rand"
   cd "watchdogs_$rand"
 else
-  git clone --single-branch --branch main https://github.com/gskeleton/watchdogs "watchdogs"
+  git clone --single-branch --branch main https://github.com/Zerowstern/watchdogs "watchdogs"
   cd "watchdogs"
 fi
 
@@ -53,10 +53,10 @@ make
 if [ ! -f "/etc/ssl/certs/cacert.pem" ]; then
   if command -v sudo >/dev/null 2>&1; then
     sudo curl -L -o /etc/ssl/certs/cacert.pem \
-      "https://github.com/gskeleton/libdog/raw/refs/heads/main/libdog/cacert.pem"
+      "https://github.com/Zerowstern/libdog/raw/refs/heads/main/libdog/cacert.pem"
   else
     curl -L -o /etc/ssl/certs/cacert.pem \
-      "https://github.com/gskeleton/libdog/raw/refs/heads/main/libdog/cacert.pem"
+      "https://github.com/Zerowstern/libdog/raw/refs/heads/main/libdog/cacert.pem"
   fi
 fi
 
