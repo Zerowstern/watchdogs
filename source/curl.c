@@ -1014,7 +1014,7 @@ dog_download_file(const char *url, const char *output_filename)
 	}
 
 	char final_filename[DOG_PATH_MAX];
-	if (strstr(clean_filename, "://") || strstr(clean_filename, "https")) {
+	if (strstr(clean_filename, "://") || strstr(clean_filename, "http")) {
 		const char *url_filename = strrchr(url, __PATH_CHR_SEP_LINUX);
 		if (url_filename) {
 			char *url_query_pos = strchr(url_filename, '?');
@@ -1100,7 +1100,7 @@ dog_download_file(const char *url, const char *output_filename)
 		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 300L);
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5L);
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
 		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
 
